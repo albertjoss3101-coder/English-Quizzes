@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revision Quiz: Phrasal Verbs (Health and Cooking)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue/gray background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        .container-quiz {
+            background-color: #ffffff;
+            max-width: 800px;
+            width: 95%;
+            margin: 1rem auto;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 2.5rem;
+        }
+        .section-header {
+            border-bottom: 3px solid #f97316; /* Orange border */
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .question-card {
+            border: 1px solid #e2e8f0;
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
+            background-color: #f8fafc;
+            border-radius: 0.75rem;
+        }
+        .choice-label {
+            display: block;
+            background-color: #ffffff;
+            padding: 0.75rem 1rem;
+            margin-top: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #cbd5e1;
+        }
+        .choice-label:hover {
+            background-color: #e5e7eb;
+            border-color: #1d4ed8;
+        }
+        input[type="radio"]:checked + .choice-label {
+            background-color: #bfdbfe; /* Light blue */
+            border-color: #1d4ed8;
+            box-shadow: 0 0 0 2px #3b82f6;
+        }
+        .results-box {
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-radius: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-quiz">
+        <h1 class="text-3xl font-extrabold text-indigo-700 text-center mb-2">Revision Quiz: Phrasal Verbs</h1>
+        <p class="text-xl text-gray-600 text-center mb-10">18 Questions on Health and Cooking</p>
+
+        <form id="quizForm" class="space-y-6">
+            <div id="quizContainer"></div>
+
+            <div class="flex justify-center">
+                <button type="button" onclick="submitQuiz()" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-8 rounded-xl transition duration-300 transform hover:scale-105 shadow-lg">
+                    Check Answers
+                </button>
+            </div>
+        </form>
+
+        <div id="results" class="hidden results-box">
+            <!-- Results will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        // Array of 18 revision questions
+        const quizData = [
+            // --- SECTION 1: HEALTH ---
+            { section: "SECTION 1: Health Phrasal Verbs (1-9)", type: "PV", correctAnswer: "come down with", options: ["run out of", "come down with", "slow down", "work out"], 
+              question: "1. I think I will ______ a cold after this long trip. (Meaning: to start to suffer from an illness)" },
+            
+            { section: "SECTION 1: Health Phrasal Verbs (1-9)", type: "PV", correctAnswer: "give up", options: ["take up", "burn out", "give up", "cut down on"],
+              question: "2. My doctor said I have to ______ coffee because of my anxiety. (Meaning: to stop doing something you do regularly)" },
+            
+            { section: "SECTION 1: Health Phrasal Verbs (1-9)", type: "PV", correctAnswer: "look after", options: ["look after", "work out", "come down with", "pig out"],
+              question: "3. My grandma had to ______ my plants while I was on vacation. (Meaning: to take care of)" },
+            
+            { section: "SECTION 1: Health Phrasal Verbs (1-9)", type: "PV", correctAnswer: "slow down", options: ["eat up", "slow down", "run out of", "turn on"],
+              question: "4. You are going too fast. You need to ______ if you don't want to get tired. (Meaning: to reduce your speed)" },
+            
+            { section: "SECTION 1: Health Phrasal Verbs (1-9)", type: "PV", correctAnswer: "burn out", options: ["burn out", "take up", "give up", "chop up"],
+              question: "5. If you keep working until midnight every day, you're going to ______. (Meaning: to become extremely tired or sick from working too hard)" },
+            
+            { section: "SECTION 1: Health Phrasal Verbs (1-9)", type: "PV", correctAnswer: "work out", options: ["work out", "look after", "cut down on", "look for"],
+              question: "6. I try to ______ at the gym three times a week to stay fit. (Meaning: to exercise)" },
+            
+            { section: "SECTION 1: Health Phrasal Verbs (1-9)", type: "PV", correctAnswer: "take up", options: ["run out of", "take up", "give up", "turn down"],
+              question: "7. I decided to ______ swimming to improve my heart health. (Meaning: to start a hobby or sport)" },
+            
+            { section: "SECTION 1: Health Phrasal Verbs (1-9)", type: "PV", correctAnswer: "cut down on", options: ["cut down on", "burn out", "come down with", "whip up"],
+              question: "8. For my diet, I need to ______ sugar and fat. (Meaning: to reduce the amount of something you eat or use)" },
+            
+            { section: "SECTION 1: Health Phrasal Verbs (1-9)", type: "PV", correctAnswer: "run out of", options: ["look after", "slow down", "run out of", "eat out"],
+              question: "9. Oh no! I think we're going to ______ water before the camp ends. (Meaning: to use all of something and have none left)" },
+
+            // --- SECTION 2: COOKING ---
+            { section: "SECTION 2: Cooking Phrasal Verbs (10-18)", type: "PV", correctAnswer: "eat up", options: ["eat up", "pig out", "taste for", "turn down"],
+              question: "10. Please, ______ your vegetables. You need vitamins! (Meaning: to finish all your food)" },
+            
+            { section: "SECTION 2: Cooking Phrasal Verbs (10-18)", type: "PV", correctAnswer: "eat out", options: ["cut down on", "eat out", "work out", "bake off"],
+              question: "11. We're tired of cooking. I suggest we ______ tonight. (Meaning: to eat at a restaurant)" },
+            
+            { section: "SECTION 2: Cooking Phrasal Verbs (10-18)", type: "PV", correctAnswer: "pig out", options: ["run out of", "pig out", "eat up", "take up"],
+              question: "12. On my birthday, I always like to ______ on pizza and ice cream. (Meaning: to eat a very large amount of food)" },
+            
+            { section: "SECTION 2: Cooking Phrasal Verbs (10-18)", type: "PV", correctAnswer: "whip up", options: ["whip up", "turn on", "look after", "slow down"],
+              question: "13. I don't have time, so I'm going to ______ a simple omelette quickly. (Meaning: to prepare a meal quickly)" },
+            
+            { section: "SECTION 2: Cooking Phrasal Verbs (10-18)", type: "PV", correctAnswer: "bake off", options: ["give up", "look for", "bake off", "chop up"],
+              question: "14. The TV dessert competition is called 'The Great British ______'. (Meaning: a cooking competition focused on baked goods)" },
+            
+            { section: "SECTION 2: Cooking Phrasal Verbs (10-18)", type: "PV", correctAnswer: "turn on", options: ["turn on", "turn down", "come down with", "eat out"],
+              question: "15. It's very cold. Could you ______ the oven to warm up the kitchen? (Meaning: to start a machine or light)" },
+            
+            { section: "SECTION 2: Cooking Phrasal Verbs (10-18)", type: "PV", correctAnswer: "turn down", options: ["turn up", "turn down", "set off", "hold on"],
+              question: "16. Be careful! You're cooking with too much fire. Please, ______ the heat. (Meaning: to reduce the volume, heat, or flow)" },
+            
+            { section: "SECTION 2: Cooking Phrasal Verbs (10-18)", type: "PV", correctAnswer: "chop up", options: ["cut down on", "chop up", "whip up", "burn out"],
+              question: "17. Before starting the soup, I need to ______ all the carrots and onions. (Meaning: to cut food into small pieces)" },
+            
+            { section: "SECTION 2: Cooking Phrasal Verbs (10-18)", type: "PV", correctAnswer: "taste for", options: ["look after", "taste for", "work out", "pig out"],
+              question: "18. I haven't developed a ______ sushi yet, but I want to try eating it again. (Meaning: to develop a liking for something)" },
+        ];
+
+        let currentSection = "";
+
+        /**
+         * Renders the quiz structure on the page.
+         */
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = ''; // Clear previous content
+
+            quizData.forEach((item, index) => {
+                // Check if the section header needs to be added
+                if (item.section !== currentSection) {
+                    container.innerHTML += `<div class="section-header"><h2 class="text-2xl font-bold text-orange-600">${item.section}</h2></div>`;
+                    currentSection = item.section;
+                }
+
+                const qNum = index + 1;
+                // Highlight the definition/context in the question
+                const questionText = item.question.replace(/\(([^)]+)\)/, (match, p1) => `<span class="font-bold text-indigo-600">(${p1})</span>`);
+
+                const questionHtml = `
+                    <div class="question-card" id="q-${qNum}">
+                        <p class="text-lg font-semibold text-gray-800 mb-3">${qNum}. ${questionText}</p>
+                        <div class="space-y-1">
+                            ${item.options.map((option, i) => `
+                                <div>
+                                    <input type="radio" id="q${qNum}-opt${i}" name="q${qNum}" value="${option}" class="hidden" required>
+                                    <label for="q${qNum}-opt${i}" class="choice-label text-gray-700">
+                                        ${option}
+                                    </label>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += questionHtml;
+            });
+        }
+
+        /**
+         * Submits the quiz, calculates the score, and displays results with feedback.
+         */
+        function submitQuiz() {
+            let score = 0;
+            const totalQuestions = quizData.length;
+            const resultsDiv = document.getElementById('results');
+            let allAnswered = true;
+
+            // 1. Reset all feedback styles
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('correct', 'wrong');
+                card.style.borderLeft = ''; // Reset border
+            });
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                 radio.nextElementSibling.classList.remove('bg-green-100', 'bg-red-100', 'font-bold');
+            });
+
+
+            // 2. Iterate and check answers
+            quizData.forEach((item, index) => {
+                const qNum = index + 1;
+                const selected = document.querySelector(`input[name="q${qNum}"]:checked`);
+                const card = document.getElementById(`q-${qNum}`);
+
+                // Check if the question was answered
+                if (!selected) {
+                    allAnswered = false;
+                    return;
+                }
+
+                if (selected.value === item.correctAnswer) {
+                    score++;
+                    card.classList.add('correct');
+                    selected.nextElementSibling.classList.add('bg-green-100', 'font-bold');
+                    card.style.borderLeft = '5px solid #10b981'; // Green border
+                } else {
+                    card.classList.add('wrong');
+                    selected.nextElementSibling.classList.add('bg-red-100'); // Highlight incorrect selection
+
+                    // Highlight the correct answer
+                    const correctLabel = document.querySelector(`input[name="q${qNum}"][value="${item.correctAnswer}"]`).nextElementSibling;
+                    correctLabel.classList.add('bg-green-100', 'font-bold');
+                    card.style.borderLeft = '5px solid #ef4444'; // Red border
+                }
+            });
+
+            // 3. Display general results
+            if (!allAnswered) {
+                resultsDiv.classList.remove('hidden');
+                resultsDiv.innerHTML = `<h2 class="text-2xl font-bold text-red-700">Attention!</h2><p class="text-gray-700 mt-2">Please answer all ${totalQuestions} questions before checking your results.</p>`;
+                resultsDiv.classList.add('bg-red-50');
+                resultsDiv.classList.remove('bg-green-50', 'bg-yellow-50');
+                return;
+            }
+
+            const percentage = (score / totalQuestions) * 100;
+            let resultClass = 'bg-green-50';
+            let resultMessage = "Excellent work! You've mastered the revision material.";
+
+            if (percentage < 60) {
+                resultClass = 'bg-red-50';
+                resultMessage = 'You need to review. Focus on the questions highlighted in red.';
+            } else if (percentage < 85) {
+                resultClass = 'bg-yellow-50';
+                resultMessage = 'Very good! Almost perfect, just need a little more practice.';
+            }
+
+            resultsDiv.classList.remove('hidden', 'bg-red-50', 'bg-green-50', 'bg-yellow-50');
+            resultsDiv.classList.add(resultClass);
+
+            // Display results
+            resultsDiv.innerHTML = `
+                <h2 class="text-2xl font-bold text-gray-800">Quiz Results</h2>
+                <p class="text-4xl font-extrabold mt-4 ${percentage >= 85 ? 'text-green-600' : (percentage < 60 ? 'text-red-600' : 'text-yellow-600')}">
+                    ${score}/${totalQuestions}
+                </p>
+                <p class="text-2xl font-semibold mt-2 ${percentage >= 85 ? 'text-green-700' : (percentage < 60 ? 'text-red-700' : 'text-yellow-700')}">
+                    ${percentage.toFixed(0)}% accuracy
+                </p>
+                <p class="text-gray-700 mt-3">${resultMessage}</p>
+                <button type="button" onclick="window.location.reload()" class="mt-4 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-2 px-4 rounded-xl transition duration-300 shadow">
+                    Try Again
+                </button>
+            `;
+
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+
+        }
+
+        // Initialize quiz on load
+        window.onload = renderQuiz;
+    </script>
+</body>
+</html>
